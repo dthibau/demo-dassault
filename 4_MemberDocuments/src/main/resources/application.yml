@@ -1,0 +1,25 @@
+
+
+spring:
+  jpa:
+    show-sql: true
+    
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/member-documents
+    username: postgres
+    password: postgres
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 50
+      connection-timeout: 2000
+    
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      
