@@ -2,6 +2,13 @@ package org.formation.model;
 
 import org.springframework.data.annotation.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
     @Id
@@ -9,8 +16,9 @@ public class Customer {
 
     public String firstName;
     public String lastName;
+    
+    public Float amount;
 
-    public Customer() {}
 
     public Customer(String firstName, String lastName) {
         this.firstName = firstName;
