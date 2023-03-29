@@ -18,98 +18,67 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.formation.rest.views.RestViews;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import lombok.Data;
 
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"email"})})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
+@Data
 public class Member {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(RestViews.List.class)
 	private long id;
-	
+
 	@NotNull
-	private String email,password;
+	@JsonView(RestViews.List.class)
+	private String email;
 	
-	private String nom,prenom;
-	
+	@JsonView(RestViews.Creation.class)
+	private String password;
+
+	@JsonView(RestViews.List.class)
+	private String nom, prenom;
+
+	@JsonView(RestViews.List.class)
 	private int age;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonView(RestViews.List.class)
 	private Date registeredDate;
-	
-	@OneToMany(cascade=CascadeType.ALL,orphanRemoval=true)
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonView(RestViews.Detail.class)
 	private Set<Document> documents = new HashSet<Document>();
 
-	public long getId() {
-		return id;
+	public void addDocument(Document doc) {
+		documents.add(doc);
+	}
+	public Member merge(Member targetMember) {
+		if (targetMember.getNom() == null) {
+			targetMember.setNom(getNom());
+		}
+		if (targetMember.getPrenom() == null) {
+			targetMember.setPrenom(getPrenom());
+		}
+		if (targetMember.getEmail() == null) {
+			targetMember.setEmail(getEmail());
+		}
+		if (targetMember.getPassword() == null) {
+			targetMember.setPassword(getPassword());
+		}
+		if (targetMember.getAge() == -1) {
+			targetMember.setAge(getAge());
+		}
+		return targetMember;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	@Column(unique=true)
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getNom() {
-		return nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getPrenom() {
-		return prenom;
-	}
-
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public Date getRegisteredDate() {
-		return registeredDate;
-	}
-
-	public void setRegisteredDate(Date registeredDate) {
-		this.registeredDate = registeredDate;
-	}
-
-	public Set<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
-	
-	public void addDocument(Document document) {
-		this.documents.add(document);
-	}
-	
 	@Transient
+	@JsonView(RestViews.List.class)
 	public String getNomComplet() {
 		return getPrenom() + " " + getNom();
 	}
@@ -135,5 +104,5 @@ public class Member {
 			return false;
 		return true;
 	}
-	
+
 }

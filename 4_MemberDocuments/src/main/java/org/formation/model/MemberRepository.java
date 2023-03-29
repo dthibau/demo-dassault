@@ -15,6 +15,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	public List<Member> findByNomContainsOrPrenomContainsAllIgnoreCase(String partialNom, String partialPrenom);
 	
 	@Query("from Member m left join fetch m.documents where m.id =:id")
-	public Member fullLoad(Long id);
+	public Optional<Member> fullLoad(Long id);
 
 }

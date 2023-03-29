@@ -11,6 +11,10 @@ import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.formation.rest.views.RestViews;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -27,14 +31,17 @@ public class Document implements Serializable {
 	private static final long serialVersionUID = 6590486482810196501L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(RestViews.Detail.class)
 	private long id;
 	
+	@JsonView(RestViews.Detail.class)
 	private String name,contentType;
 	
 	@Lob
 	private byte[] data;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonView(RestViews.Detail.class)
 	private Date uploadedDate;
 
 	public long getId() {

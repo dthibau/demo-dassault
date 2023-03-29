@@ -1,9 +1,9 @@
 
-
 spring:
   jpa:
-    show-sql: true
-
+    show-sql: false
+    open-in-view: false
+    
   mongodb:
     embedded:
       version: 4.0.21
