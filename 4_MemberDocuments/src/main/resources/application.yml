@@ -17,7 +17,15 @@ logging:
   level:
     '[org.springframework.security]': debug
     
-             
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - '*'
+  endpoint:
+    health:
+      show-details: always             
 ---
 spring:
   config:

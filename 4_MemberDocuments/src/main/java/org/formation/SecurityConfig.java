@@ -19,7 +19,7 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
 		return httpSecurity.csrf().disable().authorizeHttpRequests()
-				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**","/actuator/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER","ADMIN")
 				.antMatchers("/members/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
