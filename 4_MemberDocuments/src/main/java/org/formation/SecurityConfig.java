@@ -20,7 +20,7 @@ public class SecurityConfig {
 
 		return httpSecurity.csrf().disable().authorizeHttpRequests()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/members/**").hasRole("USER")
+				.antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER","ADMIN")
 				.antMatchers("/members/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
 				.and().formLogin().and().logout().and().build();

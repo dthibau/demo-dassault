@@ -25,13 +25,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 @Data
 @ToString(of = {"id","email","nom","prenom","age"})
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member implements UserDetails {
 
 	@Id
