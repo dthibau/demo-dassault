@@ -7,7 +7,17 @@ spring:
   mongodb:
     embedded:
       version: 4.0.21
-        
+
+  security:
+    user:
+      name: user
+      password: secret
+      
+logging:
+  level:
+    '[org.springframework.security]': debug
+    
+             
 ---
 spring:
   config:

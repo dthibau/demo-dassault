@@ -1,11 +1,11 @@
 package org.formation.model;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,15 +19,20 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import org.formation.rest.views.RestViews;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 @Data
-public class Member {
+@ToString(of = {"id","email","nom","prenom","age"})
+public class Member implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,5 +109,44 @@ public class Member {
 			return false;
 		return true;
 	}
+	@Transient 
+	Set<SimpleGrantedAuthority> grantedAuthorities;
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if ( grantedAuthorities == null ) {
+			grantedAuthorities = new HashSet<>();
+			grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+			if ( age > 18 ) {
+				grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			}
+		}
+		return grantedAuthorities;
 
+	}
+	@Override
+	public String getUsername() {		
+		return email;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	@Override
+	public String getPassword() {
+		return "{noop}" + password;
+	}
 }
